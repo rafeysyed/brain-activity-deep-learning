@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
 from imblearn.combine import SMOTEENN
 
@@ -102,8 +103,14 @@ class DataTransformation:
             X_array = np.array(X_transformed)
             y_array = np.array(y).reshape(-1, 1)  # Reshape to column vector
 
-            # Concatenate X_array and y_array along the second axis
-            transformed_array = np.concatenate((X_array, y_array), axis=1)
+            # Split the data into train and test sets
+            X_train, X_test, y_train, y_test = train_test_split(X_array, y_array, test_size=0.4, random_state=42)
+
+            # Concatenate X_train and y_train along the second axis to create train_arr
+            train_arr = np.concatenate((X_train, y_train), axis=1)
+
+            # Concatenate X_test and y_test along the second axis to create test_arr
+            test_arr = np.concatenate((X_test, y_test), axis=1)
 
             logging.info(f"Saved preprocessing object.")
 
@@ -115,7 +122,8 @@ class DataTransformation:
             )
 
             return (
-                transformed_array,
+                train_arr,
+                test_arr,
                 self.data_transformation_config.preprocessor_obj_file_path
             )
 

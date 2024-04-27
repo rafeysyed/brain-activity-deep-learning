@@ -5,4 +5,5 @@ matplotlib
 scikit-learn
 dill
 imblearn
+xgboost
 #-e .
